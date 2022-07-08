@@ -50,12 +50,11 @@ export const contactSlice = createSlice({
         state.contacts = state.contacts.filter(item => item.id !== action.payload);
       },
       filterContactByGender: (state, action) => {
-        state.filteredContacts = state.contacts.filter(item => {
-            if (action.payload.both) {
-                return true;
-            }
-            return item.gender.toLowerCase() === action.payload.gender;
-        });
+        if (action.payload.both) {
+            state.filteredContacts = state.contacts;
+        } else {
+            state.filteredContacts = state.contacts.filter(item => item.gender.toLowerCase() === action.payload.gender);
+        }
       },
       filterContactByQuery: (state, action) => {
         state.filteredContacts = state.contacts.filter(item => includedFirstLastName(item, action.payload.query));

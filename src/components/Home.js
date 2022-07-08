@@ -51,7 +51,7 @@ const Home = () => {
             dispatch(filterContactByQuery({ query: searchQuery, filtered: filteredContacts.length }))
         } 
     }, [dispatch, filteredContacts.length, searchQuery]);
-
+    
     const contactsToShow = filteredContacts.length ? filteredContacts : contacts;
 
     return (
@@ -96,7 +96,7 @@ const Home = () => {
                                         <td className='ps-4'>{contact.id}</td>
                                         <td className='ps-5'>{`${contact.first_name} ${contact.last_name}`}</td>
                                         <td className='ps-5'>{contact.email}</td>
-                                        <td className='ps-5'>{contact.gender}</td>
+                                        <td className='ps-5'>{contact.gender.toLowerCase()}</td>
                                         <td className='ps-5'>
                                             <button className='btn btn-danger btn-sm' onClick={() => deleteContactFunc(contact.id)}> Delete </button>
                                         </td>
