@@ -18,7 +18,6 @@ const Home = () => {
     }
 
     const handleSearchUpdate = (e) => {
-        // debouncing to be added.
         setGenderFilter({ male: false, female: false });
         setSearchQuery(e.target.value);
       }
@@ -35,8 +34,6 @@ const Home = () => {
             dispatch(clearFilters());
         }
     }, [dispatch, genderFilter.female, genderFilter.male, searchQuery])
-
-    //const handleSearchUpdate = (query) => setSearchQuery(query)
 
     useEffect(() => {
         if (genderFilter.male && genderFilter.female) {
@@ -55,31 +52,7 @@ const Home = () => {
         } 
     }, [dispatch, filteredContacts.length, searchQuery]);
 
-    // useEffect(() => {
-    //     if ((genderFilter.male && genderFilter.female)
-    //         || (!genderFilter.male && !genderFilter.female)) {
-    //         setFilteredContacts([...contacts]);
-    //     } else if (genderFilter.male) {
-    //         const filter = filteredContacts.filter(contact => contact.gender.toLowerCase() === "male");
-    //         setFilteredContacts([...filter]);
-    //     } else if (genderFilter.female) {
-    //         const filter = filteredContacts.filter(contact => contact.gender.toLowerCase() === "female");
-    //         setFilteredContacts([...filter]);
-    //     }
-    //     if (searchQuery) {
-    //         setFilteredContacts([...filteredContacts.filter(contact => {
-    //             return contact.first_name.includes(searchQuery) || contact.last_name.includes(searchQuery);
-    //         })]);
-    //     }
-    // }, [searchQuery, contacts, filteredContacts, genderFilter.male, genderFilter.female]);
-    // let contactsToShow = contacts;
-    // if (searchQuery) {
-    //     contactsToShow = filteredContacts;
-    // } else if (genderFilter.male || genderFilter.female) {
-    //     contactsToShow = filteredContacts;
-    // }
     const contactsToShow = filteredContacts.length ? filteredContacts : contacts;
-    console.log(">>", contactsToShow);
 
     return (
         <div className='container'>
