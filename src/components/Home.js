@@ -45,7 +45,7 @@ const Home = () => {
         } 
     }, [dispatch, filteredContacts.length, searchQuery]);
     
-    const contactsToShow = filteredContacts.length ? filteredContacts : contacts;
+    const contactsToShow = (genderFilter.male || genderFilter.female || searchQuery) ? filteredContacts : contacts;
 
     return (
         <div className='container'>
