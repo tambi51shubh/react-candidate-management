@@ -4,11 +4,14 @@ import App from './App';
 import "bootstrap/dist/css/bootstrap.min.css";
 import 'react-toastify/dist/ReactToastify.css';
 import { BrowserRouter } from 'react-router-dom';
-import { legacy_createStore as createStore} from 'redux'
-import { composeWithDevTools } from 'redux-devtools-extension';
+import { configureStore } from '@reduxjs/toolkit'
+// import { composeWithDevTools } from 'redux-devtools-extension';
 import { Provider } from 'react-redux';
+import contactReducer from './slices/contactSlice';
 
-const store = createStore(() => {}, composeWithDevTools())
+export const store = configureStore({
+  reducer: contactReducer,
+})
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
