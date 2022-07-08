@@ -35,8 +35,12 @@ const initialState = {
     filteredContacts: [],
 }
 
-export const includedFirstLastName = (item, query) => 
-    item.first_name.includes(query) || item.last_name.includes(query) || item.email.includes(query);
+export const includedFirstLastName = (item, query) => {
+  query = query.toLowerCase();
+  return item.first_name.toLowerCase().includes(query) ||
+    item.last_name.toLowerCase().includes(query) ||
+    item.email.toLowerCase().includes(query);
+}
 
 export const contactSlice = createSlice({
     name: 'contact',
@@ -47,14 +51,25 @@ export const contactSlice = createSlice({
         state.contacts.push(action.payload);
       },
       deleteContact: (state, action) => {
+        if (state.filteredContacts.length) {
+          state.filteredContacts = state.filteredContacts.filter(item => item.id !== action.payload);
+        }
         state.contacts = state.contacts.filter(item => item.id !== action.payload);
       },
       filterContactByGender: (state, action) => {
-        if (action.payload.both) {
-            state.filteredContacts = state.contacts;
-        } else {
-            state.filteredContacts = state.contacts.filter(item => item.gender.toLowerCase() === action.payload.gender);
+        debugger;
+        const { male, female } = action.payload;
+        if (male && female) {
+          state.filteredContacts = state.contacts;
+          return;
+        } else if (male) {
+          state.filteredContacts = state.contacts.filter(contact => contact.gender.toLowerCase() === "male");
+          return;
+        } else if (female) {
+          state.filteredContacts = state.contacts.filter(contact => contact.gender.toLowerCase() === "female");
+          return;
         }
+        state.filteredContacts = state.contacts;
       },
       filterContactByQuery: (state, action) => {
         state.filteredContacts = state.contacts.filter(item => includedFirstLastName(item, action.payload.query));

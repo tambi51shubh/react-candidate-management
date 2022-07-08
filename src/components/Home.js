@@ -36,15 +36,8 @@ const Home = () => {
     }, [dispatch, genderFilter.female, genderFilter.male, searchQuery])
 
     useEffect(() => {
-        if (genderFilter.male && genderFilter.female) {
-            dispatch(filterContactByGender({ both: true }));
-        }
-        if (genderFilter.male) {
-            dispatch(filterContactByGender({ gender: "male" }));
-        } else if (genderFilter.female) {
-            dispatch(filterContactByGender({ gender: "female" }));
-        }
-    }, [dispatch, genderFilter.female, genderFilter.male]);
+        dispatch(filterContactByGender(genderFilter))
+    }, [dispatch, genderFilter]);
 
     useEffect(() => {
         if (searchQuery) {
@@ -82,7 +75,6 @@ const Home = () => {
                     <table className='table table-hover'>
                         <thead className='text-white bg-dark text-center'>
                             <tr>
-                                <th scope='col'>#</th>
                                 <th scope='col'>Name</th>
                                 <th scope='col'>Email</th>
                                 <th scope='col'>Gender</th>
@@ -93,7 +85,6 @@ const Home = () => {
                             {
                                 contactsToShow.map((contact) => (
                                     <tr key={contact.id}>
-                                        <td className='ps-4'>{contact.id}</td>
                                         <td className='ps-5'>{`${contact.first_name} ${contact.last_name}`}</td>
                                         <td className='ps-5'>{contact.email}</td>
                                         <td className='ps-5'>{contact.gender.toLowerCase()}</td>
