@@ -42,14 +42,14 @@ const AddContact = () => {
         };
         
         dispatch(addContact(data));
-        toast.success("Employee Added Successfully!");
+        toast.success("Contact Added Successfully!");
         resetData();
     }
     
     
     return (
         <div className='container'>
-            <h1 className='display-3 my-5 text-center'>Add Employee Contact</h1>
+            <h1 className='display-3 my-5 text-center'>Add Contact</h1>
             <div className="row">
                 <div className="col-md-6 shadow mx-auto p-5">
                     <form onSubmit={handleSubmit}>
@@ -73,7 +73,7 @@ const AddContact = () => {
                             </div>
                         </div>
                         <div className="form-group p-3">
-                            <input type="submit" value='Add Employee' className='btn btn-dark me-5' />
+                            <input type="submit" value='Add Contact' className='btn btn-dark me-5' />
                         </div>                   
                     </form>
                 </div>

@@ -33,7 +33,6 @@ const initialData = [{
 const initialState = {
     contacts: initialData,
     filteredContacts: [],
-    queriedContacts: []
 }
 
 export const includedFirstLastName = (item, query) => 
@@ -54,18 +53,22 @@ export const contactSlice = createSlice({
         state.contacts = state.contacts.filter(item => item.id !== action.payload);
       },
       filterContactByGender: (state, action) => {
-        state.filteredContacts = state.contacts.filter(item => item.gender.toLowerCase() === action.payload);
+        state.filteredContacts = state.contacts.filter(item => {
+            if (action.payload.both) {
+                return true;
+            }
+            return item.gender.toLowerCase() === action.payload.gender;
+        });
       },
       filterContactByQuery: (state, action) => {
-        if (action.filtered) {
-            state.queriedContacts = state.filteredContacts.filter(item => includedFirstLastName(item, action.payload.query));
-        } else {
-            state.queriedContacts = state.contacts.filter(item => includedFirstLastName(item, action.payload.query));
-        }
-      }
+        state.filteredContacts = state.contacts.filter(item => includedFirstLastName(item, action.payload.query));
+      },
+      clearFilters: (state) => {
+        state.filteredContacts = [];
+      },
     },
   });
 
-  export const { addContact, deleteContact, filterContactByGender, filterContactByQuery } = contactSlice.actions
+  export const { addContact, deleteContact, filterContactByGender, filterContactByQuery, clearFilters } = contactSlice.actions
 
   export default contactSlice.reducer;

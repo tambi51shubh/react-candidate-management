@@ -2,13 +2,11 @@ import React, { useState, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 import AddContact from './AddContact';
-import SearchContact from './SearchContact';
-import { deleteContact, filterContactByGender, filterContactByQuery } from '../slices/contactSlice';
+import { deleteContact, filterContactByGender, filterContactByQuery, clearFilters } from '../slices/contactSlice';
 
 const Home = () => {
     const contacts = useSelector((state) => state.contacts);
     const filteredContacts = useSelector((state) => state.filteredContacts);
-    const queriedContacts = useSelector((state) => state.queriedContacts);
     const dispatch = useDispatch();
 
     const [searchQuery, setSearchQuery] = useState("");
@@ -19,19 +17,35 @@ const Home = () => {
         toast.success("Contact Deleted Successfully!");
     }
 
+    const handleSearchUpdate = (e) => {
+        // debouncing to be added.
+        setGenderFilter({ male: false, female: false });
+        setSearchQuery(e.target.value);
+      }
+
     const handleGenderCheck = (e) => {
       const genderFilterNew = {...genderFilter};
       genderFilterNew[e.target.name] = e.target.checked;
       setGenderFilter(genderFilterNew);
+      setSearchQuery("");
     }
 
-    const handleSearchUpdate = (query) => setSearchQuery(query)
+    useEffect(() => {
+        if (!genderFilter.male && !genderFilter.female && !searchQuery) {
+            dispatch(clearFilters());
+        }
+    }, [dispatch, genderFilter.female, genderFilter.male, searchQuery])
+
+    //const handleSearchUpdate = (query) => setSearchQuery(query)
 
     useEffect(() => {
+        if (genderFilter.male && genderFilter.female) {
+            dispatch(filterContactByGender({ both: true }));
+        }
         if (genderFilter.male) {
-            dispatch(filterContactByGender("male"));
+            dispatch(filterContactByGender({ gender: "male" }));
         } else if (genderFilter.female) {
-            dispatch(filterContactByGender("female"));
+            dispatch(filterContactByGender({ gender: "female" }));
         }
     }, [dispatch, genderFilter.female, genderFilter.male]);
 
@@ -58,32 +72,36 @@ const Home = () => {
     //         })]);
     //     }
     // }, [searchQuery, contacts, filteredContacts, genderFilter.male, genderFilter.female]);
-    let contactsToShow = contacts;
-    if (searchQuery) {
-        contactsToShow = queriedContacts;
-    } else if (genderFilter.male || genderFilter.female) {
-        contactsToShow = filteredContacts;
-    }
-
+    // let contactsToShow = contacts;
+    // if (searchQuery) {
+    //     contactsToShow = filteredContacts;
+    // } else if (genderFilter.male || genderFilter.female) {
+    //     contactsToShow = filteredContacts;
+    // }
+    const contactsToShow = filteredContacts.length ? filteredContacts : contacts;
     console.log(">>", contactsToShow);
 
     return (
         <div className='container'>
             <div className='column'>
                 <div className="form-check form-check-inline mx-5">
-                    <input name="male" className="form-check-input" type="checkbox" value="" id="maleCheck" onChange={handleGenderCheck}/>
+                    <input name="male" className="form-check-input" type="checkbox" checked={genderFilter.male} value="" id="maleCheck" onChange={handleGenderCheck}/>
                     <label className="form-check-label" htmlFor="maleCheck">
                         Male
                     </label>
                 </div>
                 <div className="form-check form-check-inline ">
-                    <input name="female" className="form-check-input" type="checkbox" value="" id="femaleCheck" onChange={handleGenderCheck}/>
+                    <input name="female" className="form-check-input" type="checkbox" value="" checked={genderFilter.female} id="femaleCheck" onChange={handleGenderCheck}/>
                     <label className="form-check-label" htmlFor="femaleCheck">
                         Female
                     </label>
                 </div>
                 <div className="form-check form-check-inline mx-5">
-                    <SearchContact onSearchUpdate={handleSearchUpdate}/>
+                    <div className="input-group m-5 lg">
+                        <div className="form-outline">
+                            <input type="search" id="form1" className="form-control" placeholder="Search ..." value={searchQuery} onChange={handleSearchUpdate}/>
+                        </div>
+                    </div>
                 </div>
             </div>
             <div className="row">
