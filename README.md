@@ -1,12 +1,9 @@
 # Clarista Assignment
 
-
-
-
-
-
-
-
+Step 1 - 
+* Created Home Route. Created several components with dummy html for now.
+* Initialised redux store with empty reducer for now.
+* Planning to use bootstrap and react-toastify. Imported all required dependencies.
 
 ### REACT INBUILT README
 # Getting Started with Create React App
